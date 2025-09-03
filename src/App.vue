@@ -31,4 +31,12 @@ import VAction from './components/v-action.vue'
   background-color: var(--background-normal);
   overflow: hidden;
 }
+
+/*测试*/
+.only_d {
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  position: absolute;
+}
 </style>

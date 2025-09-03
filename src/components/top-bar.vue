@@ -1,5 +1,6 @@
 <script setup>
 //
+import SelectModule from "./select-module.vue";
 </script>
 
 <template>
@@ -19,7 +20,6 @@
   </div>
 
   <!--以下为脚本-->
-  <select_action />
 </template>
 
 <style lang="less">

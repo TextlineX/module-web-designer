@@ -39,7 +39,7 @@
   position: absolute;
   width: 20%;
   height: 80%;
-  z-index: 1;
+  z-index: 50;
   right: 2%;
   top: 15%;
   background-color: white;
