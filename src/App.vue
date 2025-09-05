@@ -1,9 +1,9 @@
 <script setup>
-import './root.css'
+import './style/root.less'
 import left_bar from './components/left-bar.vue'
 import top_bar from './components/top-bar.vue'
 import viewer from './components/viewer.vue'
-import VAction from './components/v-action.vue'
+import './script/v-action.ts'
 </script>
 
 <template>
