@@ -14,7 +14,6 @@ import './script/v-action.ts'
     <viewer />
 
     <!-- 是的这里是脚本挂载-->
-    <v-action />
   </div>
   </div>
 </template>

@@ -1,5 +1,6 @@
-<script setup>
-
+<script lang="ts" setup>
+import {ref} from "vue";
+let s_edit_base_width = ref();
 </script>
 
 <template>
@@ -8,23 +9,40 @@
     <div class="s-viewer-header-title">
       <div class="close">
         <div class="icon">
-          <svg t="1756114342214" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+          <svg class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"
                width="200" height="200"><path d="M153.6 473.6h716.8v76.8H153.6v-76.8z" fill="#2c2c2c"></path></svg>
         </div>
       </div>
     </div>
 
   </div>
+  <!--基础信息显示-->
   <div class="s-info">
-    <div class="s-info-title"></div>
-    <div class="s-info-tag"></div>
+    <div class="s-info-title">元素名称: </div>
+    <div class="s-info-tag">标签名: </div>
   </div>
-  <div class="s-edit"></div>
+  <!--修改模块-->
+  <div class="s-edit">
+    <div class="base">
+      <div class="width">
+        <div class="title">宽度</div>
+        <input class="value" type="number" ref=s_edit_base_width>
+      </div>
+      <div class="height">
+        <div class="title">高度</div>
+        <input class="value" type="number" ref=s_edit_base_height>
+      </div>
+      <div class="opacity"></div>
+    </div>
+    <div class="button mod"></div>
+    <div class="text mod"></div>
+    <div class="image mod"></div>
+  </div>
   <div class="s-decide"></div>
   <div>
     <div class="close">
       <div class="icon">
-        <svg t="1756114342214" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+        <svg class="icon" viewBox="0 0 1024 1024"  xmlns="http://www.w3.org/2000/svg"
              width="200" height="200"><path d="M153.6 473.6h716.8v76.8H153.6v-76.8z" fill="#2c2c2c" p-id="2660"></path></svg>
       </div>
       </div>
@@ -33,6 +51,7 @@
 </template>
 
 <style scoped lang="less">
+//控制面板
 .s-viewer {
   display: flex;
   flex-direction: column;
@@ -83,5 +102,53 @@
       margin: 25% 28%;
     }
   }
+}
+
+//修改
+.s-edit{
+  //基础修改
+  .base{
+    @box: {
+      display: flex;
+      flex-direction: column;
+      margin: 2px;
+      align-items: center;
+    }
+    @title: {
+      text-shadow: var(--shadow);
+      text-align:center;
+      font-size: 20px;
+      line-height: 20px;
+      font-weight: bold;
+      margin: 10px;
+  }
+    @value: {
+      background-color: var( --text-color-light);
+      width: 80%;
+      height: 20px;
+    }
+
+    //宽度
+    .width{
+      @box();
+      .title {
+        @title();
+      }
+      .value {
+        @value();
+      }
+    }
+    //高度
+    .height{
+      @box();
+      .title {
+        @title();
+      }
+      .value {
+        @value();
+      }
+    }
+  }
+
 }
 </style>

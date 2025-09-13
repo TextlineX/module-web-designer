@@ -1,14 +1,15 @@
 
 let onlyName = 0;
+let preview_element = ''
 
 //此处运行初始加载脚本
 window.onload= function(){
     console.log('脚本初始化中。。。')
-    addDrag()
-    addDragView()
-    mouse()
-    select_action()
-    v_c()
+    addDrag().then(res=>{printf('输出调试：',res)})
+    addDragView().then(res=>{printf('输出调试：',res)})
+    mouse().then(res=>{printf('输出调试：',res)})
+    select_action().then(res=>{printf('输出调试：',res)})
+    v_c().then(res=>{printf('输出调试：',res)})
 
     //测试
 }
@@ -29,15 +30,14 @@ async function addDrag(){
     }
 
     //拖动相关操作
-    let t,tt;
-    function dragStart(e) {
+    let tt:string;
+    function dragStart(e:any) {
         let t0 = (e.target.className).split(' ');
-        t = t0[2];
         tt = t0[1];
     }
 
 
-    function dragend(e) {
+    function dragend(e:any) {
         let m = e
         //给出层级关系
         //增加元素
@@ -56,6 +56,8 @@ async function addDrag(){
         y = y - tN.top - 25;
         ddd.style.top=`${y}px`;
         ddd.style.left=`${x}px`;
+        ddd.style.width='100px';
+        ddd.style.height='100px';
         console.log(tN.left,tN.top);
         ctn.appendChild(ddd);
     }
@@ -75,7 +77,7 @@ async function mouse(){
     let view = document.querySelector('.viewer-container');
     view.addEventListener('mousemove', (e) => {
         location(e)
-        async function location(e){
+        async function location(e:any){
             let m = e
             let ac = document.querySelector('.top-bar-container p')
             ac.innerHTML = `当前位置：屏幕 X:${m.screenX} Y:${m.screenY};窗口 X:${m.clientX} Y:${m.clientY}`
@@ -113,35 +115,35 @@ async function v_c(){
 }
 
 
-async function s_w(t){
+async function s_w(t:any){
     let wrap = document.querySelector('.wrapper .container');
     if(t===true){
+        //进入选择模式
         wrap.addEventListener('mouseover', ev_s)
         wrap.addEventListener('mouseout', ev_s)
     }else if(t===false){
+        //推出选择模式
         wrap.removeEventListener('mouseover',ev_s)
         wrap.removeEventListener('mouseout',ev_s)
+        c_obj_f(preview_element);
     }else{
-        e()
+        //
     }
 }
 
 
-async function e(){
-    console.error('选择器传参错误。');
-}
 
-const ev_s =(e) => {
+const ev_s =(e:any) => {
     //判断选择对象
     //
     let ec = e.target.classList;
+    preview_element = ec;
     //这是判断对象属性和类型
     if(e.type==='mouseover' && ec.contains('temp')){
         c_obj(ec);
         e.target.classList.add('drag');
     }else if(e.type==='mouseout' && ec.contains('temp')){
         e.target.classList.remove('drag');
-        c_obj_f(ec);
     }
     else{
         //啥也不是。
@@ -150,15 +152,23 @@ const ev_s =(e) => {
 
 
 function c_obj(ccb:object) {
-    c_obj_add(ccb[2], ccb[1]);
     let obj2 = ccb[2];
     let obj3 = document.getElementsByClassName(obj2)[0] as HTMLDivElement;
+    console.log(obj3.style);
+    let e_w = obj3.style.width;
+    let e_h = obj3.style.height;
+
+    let e_w_s =parseInt(e_w.replace(/px/,''));
+    let e_h_s = parseInt(e_h.replace(/px/,''));
+
+    let o3:object =[e_w_s,e_h_s];
+    c_obj_add(ccb[2], ccb[1],o3).then(res =>{printf('调试',res)});
     obj3.draggable = true;
     obj3.addEventListener('dragend',s_ed)
 }
 
-function  c_obj_f(ccb) {
-    c_obj_add('', '');
+function  c_obj_f(ccb:any) {
+    c_obj_add('', '',[]).then(res =>{printf('调试',res)});
     let obj2 = ccb[2];
     let obj3 = document.querySelector(`.${obj2}`) as HTMLDivElement;
     obj3.draggable = false;
@@ -179,15 +189,38 @@ const s_ed = (target:any) =>{
     tr.classList.remove('drag');
 }
 
-async function c_obj_add(a1:string,a2:string) {
+async function c_obj_add(a1:string,a2:string,a3:object) {
+    //读取元素
     let c_tl = document.querySelector('.s-info .s-info-title');
     let c_tag = document.querySelector('.s-info .s-info-tag');
+    let edit_base_width = document.querySelector('.s-edit .width .value') as HTMLInputElement;
+    let edit_base_height = document.querySelector('.s-edit .height .value') as HTMLInputElement;
+    //
+    io_i(a3);
+    //
 
+    //基础信息
     c_tl.textContent = `元素名称: ${a1}`;
     c_tag.textContent = `标签名: ${a2}`;
+    //元素基础样式
+    try{
+        edit_base_width.value = a3[0];
+        edit_base_height.value = a3[1];
+    }
+    catch (e) {
+        printf('异常错误',e);
+    }
 }
 //
 //
+async function io_i(ob:object) {
+    let ht =()=>{
+       console.log('object')
+    }
+    let edit_base_width = document.querySelector('.s-edit .width .value') as HTMLInputElement;
+    let edit_base_height = document.querySelector('.s-edit .height .value') as HTMLInputElement;
+    edit_base_height.addEventListener('change',ht);
+}
 //测试
 let printf = (name:string,value:any) =>{
     let p_display_1 = `名称: ${name}`;
