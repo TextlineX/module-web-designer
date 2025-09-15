@@ -25,12 +25,20 @@ let s_edit_base_width = ref();
   <div class="s-edit">
     <div class="base">
       <div class="width">
-        <div class="title">宽度</div>
-        <input class="value" type="number" ref=s_edit_base_width>
+        <div class="title">W</div>
+        <input class="value" ref=s_edit_base_width maxlength="3" min="0" max="1980">
       </div>
       <div class="height">
-        <div class="title">高度</div>
-        <input class="value" type="number" ref=s_edit_base_height>
+        <div class="title">H</div>
+        <input class="value" ref=s_edit_base_height maxlength="3" min="0" max="1980">
+      </div>
+      <div class="left">
+        <div class="title">X</div>
+        <input class="value" ref=s_edit_base_width maxlength="3" min="0" max="1980">
+      </div>
+      <div class="top">
+        <div class="title">Y</div>
+        <input class="value" ref=s_edit_base_height maxlength="3" min="0" max="1980">
       </div>
       <div class="opacity"></div>
     </div>
@@ -109,23 +117,37 @@ let s_edit_base_width = ref();
   //基础修改
   .base{
     @box: {
-      display: flex;
-      flex-direction: column;
-      margin: 2px;
+      display: inline-flex;
+      margin: 5px;
       align-items: center;
+      position: relative;
+      border-radius: 5px;
+      width: 35%;
+      height: 15%;
+      background-color: var(--background-color);
     }
     @title: {
       text-shadow: var(--shadow);
       text-align:center;
-      font-size: 20px;
+      font-size: 13px;
       line-height: 20px;
-      font-weight: bold;
-      margin: 10px;
+      margin: 5px;
+      width: 15%;
+      height: 18px;
+      color: var(--text-color);
   }
     @value: {
       background-color: var( --text-color-light);
       width: 80%;
-      height: 20px;
+      height: 18px;
+      border: none;
+      &:focus {
+        outline: none;
+      }
+      &::selection {
+        background-color: var(--background-color-blue);
+        color: var(--text-color-light);
+      }
     }
 
     //宽度
@@ -144,6 +166,28 @@ let s_edit_base_width = ref();
       .title {
         @title();
       }
+      .value {
+        @value();
+      }
+    }
+    //X坐标
+    .left {
+      @box();
+      .title {
+        @title();
+      }
+      .value {
+        @value();
+      }
+    }
+    //Y坐标
+    .top {
+      @box();
+
+      .title {
+        @title();
+      }
+
       .value {
         @value();
       }

@@ -1,16 +1,17 @@
 
+
 let onlyName = 0;
 let preview_element = ''
 
 //此处运行初始加载脚本
 window.onload= function(){
     console.log('脚本初始化中。。。')
-    addDrag().then(res=>{printf('输出调试：',res)})
-    addDragView().then(res=>{printf('输出调试：',res)})
-    mouse().then(res=>{printf('输出调试：',res)})
-    select_action().then(res=>{printf('输出调试：',res)})
-    v_c().then(res=>{printf('输出调试：',res)})
-
+    addDrag().then(res=>{})
+    addDragView().then(res=>{})
+    mouse().then(res=>{})
+    select_action().then(res=>{})
+    v_c().then(res=>{})
+    side_display_default().then(res=>{})
     //测试
 }
 //
@@ -125,57 +126,46 @@ async function s_w(t:any){
         //推出选择模式
         wrap.removeEventListener('mouseover',ev_s)
         wrap.removeEventListener('mouseout',ev_s)
-        c_obj_f(preview_element);
     }else{
         //
     }
 }
 
 
-
+//用于判断选择模式下元素争正确和类型，并添加选择样式。
 const ev_s =(e:any) => {
     //判断选择对象
     //
     let ec = e.target.classList;
-    preview_element = ec;
+    preview_element = null;
     //这是判断对象属性和类型
     if(e.type==='mouseover' && ec.contains('temp')){
-        c_obj(ec);
+        //判断成功后将元素class保存
+        preview_element = ec;
         e.target.classList.add('drag');
+        //运行添加移动函数
+        ev_move(preview_element);
     }else if(e.type==='mouseout' && ec.contains('temp')){
+        //这是退出移动模式
         e.target.classList.remove('drag');
+        let target = e.target.classList;
+        let tg = document.getElementsByClassName(target)[0] as HTMLDivElement;
+        tg.draggable=false;
+        tg.removeEventListener('dragend', ev_move);
     }
     else{
         //啥也不是。
     }
 }
-
-
-function c_obj(ccb:object) {
-    let obj2 = ccb[2];
-    let obj3 = document.getElementsByClassName(obj2)[0] as HTMLDivElement;
-    console.log(obj3.style);
-    let e_w = obj3.style.width;
-    let e_h = obj3.style.height;
-
-    let e_w_s =parseInt(e_w.replace(/px/,''));
-    let e_h_s = parseInt(e_h.replace(/px/,''));
-
-    let o3:object =[e_w_s,e_h_s];
-    c_obj_add(ccb[2], ccb[1],o3).then(res =>{printf('调试',res)});
-    obj3.draggable = true;
-    obj3.addEventListener('dragend',s_ed)
+//
+//移动元素逻辑
+const ev_move = (e:any) => {
+    let tg = document.getElementsByClassName(preview_element)[0] as HTMLDivElement;
+    tg.draggable=true;
+    tg.addEventListener('dragend', s_ed);
 }
-
-function  c_obj_f(ccb:any) {
-    c_obj_add('', '',[]).then(res =>{printf('调试',res)});
-    let obj2 = ccb[2];
-    let obj3 = document.querySelector(`.${obj2}`) as HTMLDivElement;
-    obj3.draggable = false;
-    obj3.removeEventListener('dragend',s_ed)
-}
-
-
+//
+//选择模式下移动元素
 const s_ed = (target:any) =>{
     let tr = document.getElementsByClassName(target.target.className)[0] as HTMLDivElement;
     let tn = document.querySelector('.viewer-container');
@@ -188,7 +178,9 @@ const s_ed = (target:any) =>{
     tr.style.left=`${x}px`;
     tr.classList.remove('drag');
 }
-
+//
+//尝试修改选择元素的参数
+//
 async function c_obj_add(a1:string,a2:string,a3:object) {
     //读取元素
     let c_tl = document.querySelector('.s-info .s-info-title');
@@ -198,7 +190,7 @@ async function c_obj_add(a1:string,a2:string,a3:object) {
     //
     io_i(a3);
     //
-
+    //
     //基础信息
     c_tl.textContent = `元素名称: ${a1}`;
     c_tag.textContent = `标签名: ${a2}`;
@@ -208,11 +200,35 @@ async function c_obj_add(a1:string,a2:string,a3:object) {
         edit_base_height.value = a3[1];
     }
     catch (e) {
-        printf('异常错误',e);
+        //
     }
 }
 //
 //
+//右侧控制面板默认操作
+let none_see = ['s-info','s-base','s-edit','s-decide']
+async function side_display_default(){
+    let view = document.querySelector('.viewer-container');
+    none_see.forEach(el=>{
+        let sdd = document.getElementsByClassName(el)[0] as HTMLDivElement;
+        if(sdd){
+            sdd.style.display = 'none';
+        }else{
+            console.log('元素未找到，关闭失败')
+        }
+
+    })
+    view.addEventListener('click', (e:any)=>{
+        e.stopPropagation();
+        none_see.forEach(el=>{
+            let sdd = document.querySelector(`.${el}`) as HTMLDivElement;
+            sdd.style.display = 'none';
+        })
+    })
+}
+
+
+//测试代码
 async function io_i(ob:object) {
     let ht =()=>{
        console.log('object')
@@ -220,13 +236,4 @@ async function io_i(ob:object) {
     let edit_base_width = document.querySelector('.s-edit .width .value') as HTMLInputElement;
     let edit_base_height = document.querySelector('.s-edit .height .value') as HTMLInputElement;
     edit_base_height.addEventListener('change',ht);
-}
-//测试
-let printf = (name:string,value:any) =>{
-    let p_display_1 = `名称: ${name}`;
-    let p_display_2 =`参数: ${value}`;
-    console.group('监控参数....................')
-    console.log(p_display_1);
-    console.log(p_display_2);
-    console.groupEnd();
 }
