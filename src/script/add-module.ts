@@ -7,7 +7,6 @@ export function addDrag(){
     let num = all_template.length;
     for(let i = 0; i < num; i++){
         all_template[i].addEventListener('click', function(){
-            console.log('点击了第' + (i+1) + '个模板');
         })
         all_template[i].addEventListener('dragstart',e=>dragStart(e))
         all_template[i].addEventListener('dragend',e=>{dragend(e)})

@@ -27,10 +27,6 @@ import s_viewer from './select-module.vue';
     //margin: 10px;
     cursor: default;
     position: relative;
-
-    &:hover {
-
-    }
   }
 
   .temp.button{

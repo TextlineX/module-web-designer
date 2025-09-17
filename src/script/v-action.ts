@@ -1,4 +1,4 @@
-import {select_action,select,side_display_default} from './left-content-show'
+import {select_action,select,side_display_default} from './select-module'
 import {addDrag,addDragView,mouse} from "./add-module";
 
 //此处运行初始加载脚本
